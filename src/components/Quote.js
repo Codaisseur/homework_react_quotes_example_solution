@@ -1,23 +1,21 @@
 import React from "react";
 
 export default class Quote extends React.Component {
-  state = {
-    liked: null
+  like = () => {
+    console.log("Quote -> like");
+    this.props.setLiked(this.props.id, "yes");
   };
 
-  setLiked = () => {
-    this.setState({ liked: "yes" });
-  };
-
-  setNotLiked = () => {
-    this.setState({ liked: "no" });
+  dislike = () => {
+    console.log("Quote -> dislike");
+    this.props.setLiked(this.props.id, "no");
   };
 
   render() {
     let style = {};
-    if (this.state.liked === "yes") {
+    if (this.props.liked === "yes") {
       style = { fontWeight: "bold", color: "green" };
-    } else if (this.state.liked === "no") {
+    } else if (this.props.liked === "no") {
       style = { textDecoration: "line-through", color: "red" };
     }
 
@@ -25,8 +23,8 @@ export default class Quote extends React.Component {
       <div>
         <p style={style}>{this.props.quote}</p>
         <p>
-          By: {this.props.author} <button onClick={this.setNotLiked}>:(</button>{" "}
-          <button onClick={this.setLiked}>:)</button>
+          By: {this.props.author} <button onClick={this.dislike}>:(</button>{" "}
+          <button onClick={this.like}>:)</button>
         </p>
       </div>
     );
