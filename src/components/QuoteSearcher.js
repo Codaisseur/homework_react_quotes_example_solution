@@ -3,36 +3,40 @@ import Quote from "./Quote";
 
 export default class QuoteSearcher extends React.Component {
   state = {
-    quotes: [
-      {
-        _id: "5d91b45d9980192a317c8acc",
-        quoteText:
-          "Notice that the stiffest tree is most easily cracked, while the bamboo or willow survives by bending with the wind.",
-        quoteAuthor: "Bruce Lee"
-      },
-      {
-        _id: "5d91b45d9980192a317c8abe",
-        quoteText:
-          "Give me six hours to chop down a tree and I will spend the first four sharpening the axe.",
-        quoteAuthor: "Abraham Lincoln"
-      },
-      {
-        _id: "5d91b45d9980192a317c8955",
-        quoteText:
-          "Good timber does not grow with ease; the stronger the wind, the stronger the trees.",
-        quoteAuthor: "J. Willard Marriott"
-      }
-    ]
+    fetching: false,
+    quotes: []
   };
+
+  componentDidMount() {
+    // in order to show the "loading..." text
+    this.setState({ fetching: true });
+    fetch("https://quote-garden.herokuapp.com/quotes/search/tree")
+      .then(res => res.json())
+      .then(data => {
+        console.log("data arrived!", data);
+        this.setState({
+          fetching: false,
+          quotes: data.results
+        });
+      });
+  }
 
   render() {
     return (
       <div>
         <h1>Quotes</h1>
-        {this.state.quotes.map(quote => {
-          console.log("quote?", quote);
-          return <Quote quote={quote.quoteText} author={quote.quoteAuthor} />;
-        })}
+        {this.state.fetching ? (
+          <p>Loading...</p>
+        ) : (
+          <div>
+            {this.state.quotes.map(quote => {
+              // console.log("quote?", quote);
+              return (
+                <Quote quote={quote.quoteText} author={quote.quoteAuthor} />
+              );
+            })}
+          </div>
+        )}
       </div>
     );
   }
