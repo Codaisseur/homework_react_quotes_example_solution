@@ -3,14 +3,19 @@ import Quote from "./Quote";
 
 export default class QuoteSearcher extends React.Component {
   state = {
+    keyword: "",
     fetching: false,
     quotes: []
   };
 
-  componentDidMount() {
+  search = () => {
+    console.log("searching for:", this.state.keyword);
+
     // in order to show the "loading..." text
     this.setState({ fetching: true });
-    fetch("https://quote-garden.herokuapp.com/quotes/search/tree")
+    fetch(
+      "https://quote-garden.herokuapp.com/quotes/search/" + this.state.keyword
+    )
       .then(res => res.json())
       .then(data => {
         console.log("data arrived!", data);
@@ -24,10 +29,10 @@ export default class QuoteSearcher extends React.Component {
           })
         });
       });
-  }
+  };
 
   setLiked = (id, liked) => {
-    console.log("QuoteSearcher -> setLiked", id, liked);
+    // console.log("QuoteSearcher -> setLiked", id, liked);
 
     const updatedQuotes = this.state.quotes.map(quote => {
       if (quote._id === id) {
@@ -40,10 +45,17 @@ export default class QuoteSearcher extends React.Component {
       }
     });
 
-    console.log("QuoteSearcher -> updatedQuotes", updatedQuotes);
+    // console.log("QuoteSearcher -> updatedQuotes", updatedQuotes);
 
     this.setState({
       quotes: updatedQuotes
+    });
+  };
+
+  handleChange = e => {
+    console.log("handleChange", e);
+    this.setState({
+      keyword: e.target.value
     });
   };
 
@@ -59,6 +71,10 @@ export default class QuoteSearcher extends React.Component {
     return (
       <div>
         <h1>Quotes</h1>
+        <p>
+          <input value={this.state.keyword} onChange={this.handleChange} />
+          <button onClick={this.search}>Search!</button>
+        </p>
         <p>
           <strong>
             Liked: {numLiked} / Disliked: {numDisliked}

@@ -2,12 +2,12 @@ import React from "react";
 
 export default class Quote extends React.Component {
   like = () => {
-    console.log("Quote -> like");
+    // console.log("Quote -> like");
     this.props.setLiked(this.props.id, "yes");
   };
 
   dislike = () => {
-    console.log("Quote -> dislike");
+    // console.log("Quote -> dislike");
     this.props.setLiked(this.props.id, "no");
   };
 
